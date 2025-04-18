@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Do Now</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+<div id="enterInfo">
+    <h1> enterInfo </h1>
+    <h3>ID</h3>
+    <input id="id" type="text">
+    <h3>NAME</h3>
+    <input id="name" type="text">
+    <h3>AGE</h3>
+    <input id="age" type="number">
+    <br>
+    <button id="enterId">ENTER</button> <br>
+    <button id="update">update</button><br>
+    <button id="remove">remove</button>
+</div>
+
+
+<div id="findInfo">
+<h1> find by id </h1>
+<h3>ID</h3>
+<input id="findId" type="text"> <br>
+<button id="find">find</button> <br>
+
+<p id="displayName" type="text"></p>
+<p id="displayAge" type="text"></p>
+<p id="displayId" type="text"></p>
+</div>
+
+
+
+
+
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMks4BV6Jh-hCz-xQI7LpRpYaS-C71onk",
+      authDomain: "first-e5d95.firebaseapp.com",
+      databaseURL: "https://first-e5d95-default-rtdb.firebaseio.com",
+      projectId: "first-e5d95",
+      storageBucket: "first-e5d95.firebasestorage.app",
+      messagingSenderId: "291809040112",
+      appId: "1:291809040112:web:50f158434799d63f0dd435"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import {getDatabase, set, get, update, remove, ref, child }
+    from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js"
+//new_________________________________________________________________________________________
+const db = getDatabase();
+
+//declare_________________________________________________________________________________________
+let id = document.querySelector("#id");
+console.log(id);
+let name = document.querySelector("#name");
+let age = document.querySelector("#age");
+let enterIdBtn = document.querySelector("#enterId");
+let updateBtn = document.querySelector("#update");
+let removeBtn = document.querySelector("#remove");
+let findId = document.querySelector("#findId");
+let findBtn = document.querySelector("#find"); 
+let displayName = document.querySelector("#displayName");
+let displayAge = document.querySelector("#displayAge");
+let displayId = document.querySelector("#find");
+//fubction________________________________________________________________________________________
+
+function EnterData(){
+  
+    set(ref(db, "People/" + id.value),{
+        Name: name.value,
+        ID : id.value,
+        Age: age.value 
+    })
+    .then(()=>{alert("added")
+    })
+    .catch((error)=>{alert("error")
+
+    })
+}
+
+
+function FindData(){
+    console.log(findId.value);
+
+    let dbref = ref(db);
+
+    get(child(dbref, "People/" + findId.value))
+    .then((snapshot)=>{
+        if (snapshot.exists()){
+            displayName.innerHTML = "name:" + snapshot.val().Name;
+            displayAge.innerHTML = "age:" + snapshot.val().Age;
+        } else {alert("nodata");
+
+        }
+})
+.catch((error)=>{
+    alert(error);
+})
+}
+
+function UpdateData(){
+    update(ref(db, "People/" + id.value),{
+        Name: name.value,
+        Age: age.value
+    }).then(()=>{
+        alert("update complete")
+    })
+.catch((error)=>{
+    alert(error);
+
+});
+}
+
+function RemoveData(){
+    remove(ref(db, "People/" + id.value))
+    .then(()=>{
+        alert("date delrte")
+    })
+.catch((error)=>{
+    alert(error);
+
+});
+}
+
+enterIdBtn.onclick = function() {
+    console.log("enterIdBtn");
+    EnterData();
+};
+
+updateBtn.onclick = function() {
+    console.log("updateBtn");
+    UpdateData()
+};
+
+removeBtn.onclick = function() {
+    console.log("removeBtn");
+    RemoveData()
+};
+
+findBtn.onclick = function() {
+    console.log("findBtn.");
+;
+    FindData();
+};
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>
